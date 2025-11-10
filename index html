@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Pooja d!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles and animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        .font-script {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* --- Hero Section & Confetti --- */
+        #hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        #confetti-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Text glow animation */
+        @keyframes text-glow {
+            0%, 100% {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff00de, 0 0 40px #ff00de;
+            }
+            50% {
+                text-shadow: 0 0 20px #fff, 0 0 30px #ff00de, 0 0 40px #ff00de, 0 0 50px #ff00de;
+            }
+        }
+
+        .animate-text-glow {
+            animation: text-glow 2.5s ease-in-out infinite;
+        }
+        
+        /* Floating hearts animation */
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
+
+        .hearts-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 2rem;
+            color: rgba(255, 105, 180, 0.6); /* Hot pink with transparency */
+            animation: float 10s linear infinite;
+        }
+
+        /* --- Animated Cards Section --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            height: 300px;
+            cursor: pointer;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-container:hover .card {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .card-front-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            color: #333;
+            transform: rotateY(180deg);
+        }
+        
+        .card-back p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* --- Fireworks Section --- */
+        #fireworks-container {
+            position: relative;
+            height: 60vh;
+            background: #000020; /* Night sky */
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 1;
+            animation: firework-explode 1.2s ease-out forwards;
+        }
+
+        @keyframes firework-explode {
+            0% {
+                transform: scale(0.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(25);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-pink-50 text-gray-800">
+
+    <!-- Hero Section with Confetti -->
+    <section id="hero" class="h-screen flex items-center justify-center text-white text-center p-4">
+        <canvas id="confetti-canvas"></canvas>
+        <div class="hero-content">
+            <h1 class="font-script text-7xl md:text-9xl mb-4 animate-text-glow">Happy Birthday</h1>
+            <h2 class="font-script text-6xl md:text-8xl mb-8 animate-text-glow">Pooja Sharma!</h2>
+            <p class="text-xl md:text-2xl max-w-2xl mx-auto">
+                On your special day, I wanted to create something a little magical, just for you.
+            </p>
+            <div class="mt-12 text-3xl animate-bounce">
+                &darr;
+            </div>
+        </div>
+    </section>
+
+    <!-- Intro Message Section -->
+    <section class="py-20 px-6 max-w-4xl mx-auto text-center">
+        <div class_id="hearts-container" id="hearts-container"></div>
+        <h2 class="text-4xl md:text-5xl font-bold mb-6 text-pink-600">To My Dearest Sister,</h2>
+        <p class="text-lg md:text-xl text-gray-700 leading-relaxed">
+            From all the silly fights to the moments we've shared, there's no one else I'd rather have as my sister.
+            You're not just my sister, you're my best friend. Here are a few wishes for you on your big day!
+        </p>
+    </section>
+
+    <!-- Animated Cards Section -->
+    <section class="bg-white py-24 px-6">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-purple-700">A Few Wishes for You...</h2>
+            <p class="text-center text-lg mb-12 text-gray-600">Click (or hover) on the cards to reveal a message!</p>
+            
+            <div class="card-grid">
+                <!-- Card 1 -->
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">
+                            <span class="card-front-icon">🎉</span>
+                            A Wish for Joy!
+                        </div>
+                        <div class="card-back">
+                            <p class="font-semibold text-xl mb-3">Pure Joy! 🎈</p>
+                            <p>May your day be as bright, bubbly, and full of joy as you are. Wishing you endless happiness today and always!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">
+                            <span class="card-front-icon">✨</span>
+                            A Wish for Dreams!
+                        </div>
+                        <div class="card-back">
+                            <p class="font-semibold text-xl mb-3">Dream Big! 🌟</p>
+                            <p>May this new year of your life bring you closer to all your dreams. You have the sparkle to achieve anything you set your mind to!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">
+                            <span class="card-front-icon">💖</span>
+                            A Wish for Love!
+                        </div>
+                        <div class="card-back">
+                            <p class="font-semibold text-xl mb-3">So Much Love! 🥰</p>
+                            <p>Wishing you a day filled with all the love you deserve (which is a LOT!). Know that you are so loved by everyone around you.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">
+                            <span class="card-front-icon">😂</span>
+                            A Wish for Laughter!
+                        </div>
+                        <div class="card-back">
+                            <p class="font-semibold text-xl mb-3">Endless Laughter! 🤣</p>
+                            <p>May your life be filled with so much laughter that your cheeks hurt. Never stop being the hilarious person you are!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 5 -->
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">
+                            <span class="card-front-icon">🚀</span>
+                            A Wish for Adventure!
+                        </div>
+                        <div class="card-back">
+                            <p class="font-semibold text-xl mb-3">New Adventures! 🌍</p>
+                            <p>Here's to a year of new adventures, exciting opportunities, and making memories that will last a lifetime. Go for it!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 6 -->
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">
+                            <span class="card-front-icon">🎂</span>
+                            A Wish for Cake!
+                        </div>
+                        <div class="card-back">
+                            <p class="font-semibold text-xl mb-3">Eat the Cake! 🍰</p>
+                            <p>It's your day! Eat the cake, make a mess, and don't you dare count the calories. You deserve all the treats today!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fireworks "Make a Wish" Section -->
+    <section class="py-24 px-6 bg-pink-50">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-pink-600">Make a Big Wish!</h2>
+            <p class="text-lg md:text-xl text-gray-700 mb-10">
+                Click the button below to light up the sky for your birthday.
+                Think of your biggest wish... and here's to it coming true!
+            </p>
+            <button id="fireworks-btn" class="bg-purple-600 text-white font-bold py-3 px-8 rounded-full text-xl hover:bg-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                Light 'em up! 🎆
+            </button>
+            <div id="fireworks-container" class="mt-12 shadow-2xl"></div>
+        </div>
+    </section>
+
+    <!-- Final Message -->
+    <footer class="py-20 px-6 text-center bg-gray-800 text-white">
+        <div class="max-w-3xl mx-auto">
+            <p class="font-script text-5xl mb-6">Pooja d ,</p>
+            <p class="text-xl text-gray-300 leading-relaxed mb-8">
+                You are one of the most amazing people I know. Thank you for being you.
+                I hope this little website made you smile. Have the happiest, most wonderful birthday ever!
+            </p>
+            <p class="text-2xl text-pink-300 font-bold">With all my love,</p>
+            <p class="text-2xl text-pink-300 font-bold mt-2">Your Loving  brother akash </p>
+        </div>
+    </footer>
+
+
+    <script>
+        // --- Confetti Animation ---
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctx = confettiCanvas.getContext('2d');
+        let particles = [];
+        const particleCount = 300;
+        const colors = ['#f6d365', '#fda085', '#a1c4fd', '#c2e9fb', '#ff69b4'];
+
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = Math.random() * 5 + 2;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.vx = Math.random() * 2 - 1;
+                this.vy = Math.random() * 2 + 1; // Always fall down
+                this.opacity = 1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.opacity -= 0.005;
+                if (this.y > confettiCanvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * confettiCanvas.width;
+                    this.opacity = 1;
+                }
+            }
+        }
+
+        function initConfetti() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(Math.random() * confettiCanvas.width, Math.random() * confettiCanvas.height - confettiCanvas.height));
+            }
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+
+        window.addEventListener('resize', () => {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            initConfetti();
+        });
+
+        initConfetti();
+        animateConfetti();
+        
+        // --- Floating Hearts ---
+        const heartsContainer = document.getElementById('hearts-container');
+        if (heartsContainer) {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerText = '❤';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${Math.random() * 5 + 8}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // --- Fireworks Animation ---
+        const fireworksBtn = document.getElementById('fireworks-btn');
+        const fireworksContainer = document.getElementById('fireworks-container');
+
+        fireworksBtn.addEventListener('click', () => {
+            // Clear previous fireworks
+            fireworksContainer.innerHTML = '';
+            
+            // Create a burst of 10 fireworks
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createFireworkBurst, Math.random() * 1000);
+            }
+            
+            // Disable button briefly
+            fireworksBtn.disabled = true;
+            fireworksBtn.innerText = 'Wow! 🎆';
+            setTimeout(() => {
+                fireworksBtn.disabled = false;
+                fireworksBtn.innerText = "Light 'em up again! 🎆";
+            }, 1500);
+        });
+
+        function createFireworkBurst() {
+            const burstX = Math.random() * (fireworksContainer.offsetWidth - 100) + 50;
+            const burstY = Math.random() * (fireworksContainer.offsetHeight - 100) + 50;
+            const burstColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // Create 30 particles for each burst
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('firework');
+                particle.style.left = `${burstX}px`;
+                particle.style.top = `${burstY}px`;
+                particle.style.backgroundColor = burstColor;
+
+                // Random angle and distance
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 100 + 50;
+                
+                // We use CSS animation for the explosion, but set the final position via transform
+                // The animation will scale from the center, but we translate each particle
+                const translateX = Math.cos(angle) * distance;
+                const translateY = Math.sin(angle) * distance;
+
+                // We'll use the animation to handle the scaling and fade-out
+                // But we need to translate each particle to its final destination
+                // A bit of a trick: wrap it to apply translate separately
+                
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'absolute';
+                wrapper.style.left = `${burstX}px`;
+                wrapper.style.top = `${burstY}px`;
+                wrapper.style.transform = `translate(${translateX}px, ${translateY}px)`;
+                
+                particle.style.left = '0';
+                particle.style.top = '0';
+                
+                wrapper.appendChild(particle);
+                fireworksContainer.appendChild(wrapper);
+
+                // Remove after animation
+                setTimeout(() => {
+                    wrapper.remove();
+                }, 1200);
+            }
+        }
+    </script>
+
+</body>
+</html>```
+
